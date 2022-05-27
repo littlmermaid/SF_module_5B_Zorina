@@ -1,0 +1,74 @@
+field_ = [["_"] * 3 for _ in range(3)]
+
+
+def start():
+    print("Добро пожаловать в игру\n   'КРЕСТИКИ НОЛИКИ'\n")
+    print("Для совершения хода вводим номер строки и номер столбца")
+
+
+def field():
+    print("  0 1 2")
+    for a in range(len(field_)):
+        print(str(a), *field_[a])
+
+
+def ask(f):
+    while True:
+        show = input("Введите координаты вашего хода через пробел:").split()
+        if len(show) != 2:
+            print("Введите две координаты!")
+            continue
+
+        if not(show[0].isdigit()) and (show[1].isdigit()):
+            print("Введите числа!")
+            continue
+
+        x, y = map(int, show)
+        if not (0 <= x <= 2 and 0 <= y <= 2):
+            print("Координаты вне диапазона!")
+            continue
+
+        if field_[x][y] != "_":
+            print("Клетка занята!")
+            continue
+        break
+    return x, y
+
+
+def win():
+    win_win = (((0, 0), (0, 1), (0, 2)), ((1, 0), (1, 1), (1, 2)), ((2, 0), (2, 1), (2, 2)),
+                ((0, 2), (1, 1), (2, 0)), ((0, 0), (1, 1), (2, 2)), ((0, 0), (1, 0), (2, 0)),
+                ((0, 1), (1, 1), (2, 1)), ((0, 2), (1, 2), (2, 2)))
+    for cord in win_win:
+        symbols = []
+        for c in cord:
+            symbols.append(field_[c[0]][c[1]])
+        if symbols == ["x", "x", "x"]:
+            print("Выиграл Крестик!")
+            return True
+        if symbols == ["o", "o", "o"]:
+            print("Выиграл Нолик!")
+            return True
+    return False
+
+
+start()
+field_ = [["_"] * 3 for _ in range(3)]
+count_ = 0
+while True:
+    count_ += 1
+    field()
+    if count_ % 2 == 0:
+        user = "o"
+        print("Ходит нолик")
+    else:
+        user = "x"
+        print("Ходит крестик")
+    if count_ == 9:
+        print("Ничья")
+        break
+    if win():
+        break
+
+    x, y = ask(field_)
+    field_[x][y] = user
